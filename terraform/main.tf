@@ -15,10 +15,6 @@ resource "aws_dynamodb_table" "dolos_parsed_transcripts" {
     type               = "S"
   }
   hash_key             = "guest"
-  ttl {
-    enabled            = true
-    attribute_name     = "expiryPeriod"
-  }
   point_in_time_recovery {
     enabled = true
   }
