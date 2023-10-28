@@ -1,4 +1,7 @@
 using DolosIngestion.Services;
+using DolosIngestion.Utils; 
+
+LoadEnvironmentVariables.LoadEnvironmentVariablesFromDotEnv();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

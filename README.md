@@ -5,7 +5,6 @@ Ingest all of the transcripts from larry king live into training data for openAi
 ## Project Plan
 
 ### DolosIngestion
-- Controller to send a link to publicly available transcript of an interview
+- Run this part locally using a .env file at the root of DolosIngestion/ to 
+set your AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and SQS_QUEUE_URL environment variables 
 
-### DolosIngestion.Business
-- Services to scrape transform the publicly available site page with a transcript on it

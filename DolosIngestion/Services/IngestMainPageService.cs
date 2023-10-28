@@ -23,20 +23,23 @@ public class IngestMainPageService : IIngestMainPage
     {
         HttpClient? client = _HttpClientFactory.CreateClient();
         string? nextPage = null;
+        int count = 0;
         do
         {
             string response = await client.GetStringAsync($"{url}{nextPage}");
             IEnumerable<string> links = ExtractTranscriptLinks(response);
-            links.ToList().ForEach(s => SendMessageToQueue(url, s));
+            var listLinks = links.ToList();
+            listLinks.ForEach(s => SendMessageToQueue(url, s));
+            count += listLinks.Count;
             nextPage = GetNextPageLink(response);
         } while (nextPage != null);
-        
+        Console.WriteLine($"Processed {count} urls");
         return true;
     }
 
     private async void SendMessageToQueue(string baseUrl, string linkExt)
     {
-        var fullUrl = $"{baseUrl}{linkExt}";
+        var fullUrl = $"{baseUrl}{linkExt.Replace("/show/lkl", "")}";
         bool sentMessage = await _Queue.SendMessageAsync(fullUrl);
         if (sentMessage) Console.WriteLine($"Successfully sent message for ext: {fullUrl}");
     }

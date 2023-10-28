@@ -10,6 +10,9 @@
     <PackageReference Include="AWSSDK.SQS" Version="3.7.200.64" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="HtmlAgilityPack.NetCore" Version="1.5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
