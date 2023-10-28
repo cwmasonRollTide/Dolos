@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "waym3EeOAQXSaNM/EQ0CaAoSOeMl6vvnH5ash+j0+YXanlxZ4bb9lFf9SnN8JBUiqIu73Ado0OjIp3mIPNu8Iw==",
+  "dgSpecHash": "zW8ANNIVyN89vAkll2k8VrhmUuGCuYgyy5OdHLaSthEAWJRIFUKRQGuV9hCa4qyAWYH0v510cvTBFQKBckgmOQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Connor\\projects\\Dolos\\DolosIngestion.Tests\\DolosIngestion.Tests.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Connor\\.nuget\\packages\\awssdk.core\\3.7.204.10\\awssdk.core.3.7.204.10.nupkg.sha512",
+    "C:\\Users\\Connor\\.nuget\\packages\\awssdk.sqs\\3.7.200.64\\awssdk.sqs.3.7.200.64.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\fluentassertions\\6.12.0\\fluentassertions.6.12.0.nupkg.sha512",

@@ -22,5 +22,7 @@
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Pkgxunit_analyzers Condition=" '$(Pkgxunit_analyzers)' == '' ">C:\Users\Connor\.nuget\packages\xunit.analyzers\0.10.0</Pkgxunit_analyzers>
     <PkgNewtonsoft_Json Condition=" '$(PkgNewtonsoft_Json)' == '' ">C:\Users\Connor\.nuget\packages\newtonsoft.json\9.0.1</PkgNewtonsoft_Json>
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Connor\.nuget\packages\awssdk.core\3.7.204.10</PkgAWSSDK_Core>
+    <PkgAWSSDK_SQS Condition=" '$(PkgAWSSDK_SQS)' == '' ">C:\Users\Connor\.nuget\packages\awssdk.sqs\3.7.200.64</PkgAWSSDK_SQS>
   </PropertyGroup>
 </Project>

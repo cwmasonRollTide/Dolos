@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "CT+hbg5G9s0OOTyssUggSK8ZlDrtdQnUqwMS5KZA2SdtAEaesZKbR9PctQZfS6Saq3L7dE2M0nWEl4hgU8QZcQ==",
+  "dgSpecHash": "Uc37eaYIwDsmyoEdcy2t/FvB8btlgwoUbT0T5AiJ4OW2HbxqfIqFayTmprJ7pDEoGzOq5mQiM3oG/4Uqc51Hlw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Connor\\projects\\Dolos\\DolosIngestion\\DolosIngestion.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Connor\\.nuget\\packages\\awssdk.core\\3.7.204.10\\awssdk.core.3.7.204.10.nupkg.sha512",
+    "C:\\Users\\Connor\\.nuget\\packages\\awssdk.sqs\\3.7.200.64\\awssdk.sqs.3.7.200.64.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\fluentassertions\\6.12.0\\fluentassertions.6.12.0.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\htmlagilitypack.netcore\\1.5.0.1\\htmlagilitypack.netcore.1.5.0.1.nupkg.sha512",
     "C:\\Users\\Connor\\.nuget\\packages\\microsoft.netcore.platforms\\1.0.1\\microsoft.netcore.platforms.1.0.1.nupkg.sha512",

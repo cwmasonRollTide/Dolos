@@ -11,9 +11,11 @@ public interface IIngestMainPage
 
 public class IngestMainPageService : IIngestMainPage
 {
+    private readonly IQueueWrapper _Queue;
     private readonly IHttpClientFactory _HttpClientFactory;
-    public IngestMainPageService(IHttpClientFactory clientFactory)
+    public IngestMainPageService(IHttpClientFactory clientFactory, IQueueWrapper queueWrapper)
     {
+        _Queue = queueWrapper;
         _HttpClientFactory = clientFactory;
     }
     
@@ -32,9 +34,11 @@ public class IngestMainPageService : IIngestMainPage
         return true;
     }
 
-    private void SendMessageToQueue(string baseUrl, string linkExt)
+    private async void SendMessageToQueue(string baseUrl, string linkExt)
     {
-        throw new NotImplementedException();
+        var fullUrl = $"{baseUrl}{linkExt}";
+        bool sentMessage = await _Queue.SendMessageAsync(fullUrl);
+        if (sentMessage) Console.WriteLine($"Successfully sent message for ext: {fullUrl}");
     }
 
     public string? GetNextPageLink(string htmlContent)
@@ -45,10 +49,9 @@ public class IngestMainPageService : IIngestMainPage
         return nextPageNode?.GetAttributeValue("href", null);
     }
 
-    
     public IEnumerable<string> ExtractTranscriptLinks(string htmlContent)
     {
-        var doc = new HtmlAgilityPack.HtmlDocument();
+        var doc = new HtmlDocument();
         doc.LoadHtml(htmlContent);
 
         List<string> links = doc.DocumentNode

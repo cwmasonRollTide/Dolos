@@ -6,6 +6,8 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IIngestMainPage, IngestMainPageService>();
+builder.Services.AddSingleton<IQueueWrapper, QueueWrapper>(sp => 
+    new QueueWrapper(Environment.GetEnvironmentVariable("SQS_QUEUE_URL") ?? string.Empty));
 
 WebApplication app = builder.Build();
 

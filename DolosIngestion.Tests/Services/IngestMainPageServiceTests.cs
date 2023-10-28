@@ -6,15 +6,17 @@ namespace DolosIngestion.Tests.Services;
 
 public class IngestMainPageServiceTests
 {
-    private IIngestMainPage IngestMainPageService;
-    private static Mock<IHttpClientFactory> MockedClientFactory;
+    private Mock<IQueueWrapper> MockedQueueWrapper;
+    private static Mock<IHttpClientFactory>? MockedClientFactory;
+    private IIngestMainPage IngestMainPageService => 
+        new IngestMainPageService(MockedClientFactory.Object, MockedQueueWrapper.Object);
 
     public IngestMainPageServiceTests()
     {
+        MockedQueueWrapper = new Mock<IQueueWrapper>();
+        MockedQueueWrapper.Setup(x => x.SendMessageAsync(It.IsAny<string>())).ReturnsAsync(true);
         MockedClientFactory = new Mock<IHttpClientFactory>();
-        IngestMainPageService = new IngestMainPageService(MockedClientFactory.Object);
     }
-    
     
     private const string TestLinkResponse = @"
         <p><a href=""/"" class=""cnnTransProv"">Return to Transcripts main page</a></p>
