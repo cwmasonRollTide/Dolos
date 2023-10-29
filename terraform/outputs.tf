@@ -3,5 +3,5 @@
 }
 
 output "ECR_REGISTRY_URL" {
-  value   = aws_ecr_repository.dolos_ingestion.repository_url
+  value   = aws_ecr_repository.dolos_transcript_parser.repository_url
 }
