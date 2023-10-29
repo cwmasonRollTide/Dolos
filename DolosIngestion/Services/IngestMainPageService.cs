@@ -23,12 +23,12 @@ public class IngestMainPageService : IIngestMainPage
     {
         HttpClient? client = _HttpClientFactory.CreateClient();
         string? nextPage = null;
-        int count = 0;
+        var count = 0;
         do
         {
             string response = await client.GetStringAsync($"{url}{nextPage}");
             IEnumerable<string> links = ExtractTranscriptLinks(response);
-            var listLinks = links.ToList();
+            List<string> listLinks = links.ToList();
             listLinks.ForEach(s => SendMessageToQueue(url, s));
             count += listLinks.Count;
             nextPage = GetNextPageLink(response);

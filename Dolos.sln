@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DolosIngestion.Tests", "Dol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DolosIngestion", "DolosIngestion\DolosIngestion.csproj", "{CCA9EC6D-0FB1-42DF-AA76-F656B8730A22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DolosTranscriptParser", "DolosTranscriptParser\DolosTranscriptParser.csproj", "{CBCA168D-E8C4-4BF4-A3D6-37F1814AAFA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DolosTranscriptParser.Tests", "DolosTranscriptParser.Tests\DolosTranscriptParser.Tests.csproj", "{60016402-6BF2-46EB-BBB5-83131E2E3A0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{CCA9EC6D-0FB1-42DF-AA76-F656B8730A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCA9EC6D-0FB1-42DF-AA76-F656B8730A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCA9EC6D-0FB1-42DF-AA76-F656B8730A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBCA168D-E8C4-4BF4-A3D6-37F1814AAFA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCA168D-E8C4-4BF4-A3D6-37F1814AAFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCA168D-E8C4-4BF4-A3D6-37F1814AAFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCA168D-E8C4-4BF4-A3D6-37F1814AAFA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60016402-6BF2-46EB-BBB5-83131E2E3A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60016402-6BF2-46EB-BBB5-83131E2E3A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60016402-6BF2-46EB-BBB5-83131E2E3A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60016402-6BF2-46EB-BBB5-83131E2E3A0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
