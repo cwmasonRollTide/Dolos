@@ -27,22 +27,27 @@ public class SqsPollingService : BackgroundService
                 MaxNumberOfMessages = 5
             };
             ReceiveMessageResponse? response = await client.ReceiveMessageAsync(request, stoppingToken);
-            foreach(Message? message in response.Messages)
+            
+            await Task.WhenAll(response.Messages.Select(async message => 
             {
                 Console.WriteLine("New message received, url:");
                 Console.WriteLine(message.Body);
-                var promptTokens = await _mediator.Send(new ParseTranscriptRequest
+                
+                ParseTranscriptResponse promptTokens = await _mediator.Send(new ParseTranscriptRequest
                 {
                     TranscriptUrl = message.Body
                 }, stoppingToken);
+                
                 Console.WriteLine($"Transcript processed successfully for url: {message.Body}");
-                var saveToStorage = await _mediator.Send(new SavePromptsRequest
+                
+                SavePromptsResponse saveToStorage = await _mediator.Send(new SavePromptsRequest
                 {
                     Guest = promptTokens.Guest,
                     Prompts = promptTokens.Prompts
-                });
+                }, stoppingToken);
+                
                 if (saveToStorage.Success) Console.WriteLine($"Successfully saved interview prompt and completions");
-            }
+            }));
         }
     }
 }

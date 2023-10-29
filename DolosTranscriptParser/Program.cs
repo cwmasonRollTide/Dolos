@@ -9,6 +9,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 foreach (Type validator in Assembly.GetExecutingAssembly().ExportedTypes
@@ -55,6 +56,7 @@ else
 
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.MapHealthChecks("/health");
 
 app.UseRouting();
 

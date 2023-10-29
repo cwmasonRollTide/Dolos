@@ -30,7 +30,7 @@ public class DynamoDbRepository : IDynamoDbRepository
             }
         };
 
-        var response = await _client.QueryAsync(queryRequest);
+        QueryResponse? response = await _client.QueryAsync(queryRequest);
 
         if (response.Items.Count > 0)
         {

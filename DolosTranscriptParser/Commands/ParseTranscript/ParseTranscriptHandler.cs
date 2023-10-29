@@ -16,22 +16,16 @@ public class ParseTranscriptHandler : IRequestHandler<ParseTranscriptRequest, Pa
     public async Task<ParseTranscriptResponse> Handle(ParseTranscriptRequest request, CancellationToken cancellationToken)
     {
         string rawTranscriptResponse = await _httpClient.GetStringAsync(request.TranscriptUrl, cancellationToken);
-        var guestName = TranscriptParser.ExtractGuestName(rawTranscriptResponse);
+        string guestName = TranscriptParser.ExtractGuestName(rawTranscriptResponse);
+        
         if (string.IsNullOrEmpty(guestName))
             throw new Exception("Unable to parse guest name");
-            
 
+        List<PromptCompletionPair> prompts = TranscriptParser.ExtractPromptCompletionPairs(rawTranscriptResponse, guestName);
         return new ParseTranscriptResponse
         {
             Guest = guestName,
-            Prompts = new List<PromptCompletionPair>
-            {
-                new()
-                {
-                    Prompt = "test",
-                    Completion = "completion"
-                }
-            }
+            Prompts = prompts
         };
     }
 }

@@ -28,7 +28,7 @@
 #    Statement = [
 #      {
 #        Action = [
-#          "sqs:SendMessage",
+#          "sqs:ReceiveMessage",
 #          "sqs:GetQueueUrl"
 #        ],
 #        Effect   = "Allow",
