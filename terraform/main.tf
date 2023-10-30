@@ -102,6 +102,25 @@ resource "aws_route_table_association" "dolos_public_subnet_association" {
   route_table_id = aws_route_table.dolos_public_route_table.id
 }
 
+resource "aws_route_table" "dolos_private_route_table" {
+  vpc_id = aws_vpc.dolos_vpc.id
+
+  tags = {
+    Name = "dolos-private-route-table"
+  }
+}
+
+resource "aws_route" "private_nat_route" {
+  route_table_id         = aws_route_table.dolos_private_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.dolos_nat_gateway.id
+}
+
+resource "aws_route_table_association" "dolos_subnet_association" {
+  subnet_id      = aws_subnet.dolos_subnet.id
+  route_table_id = aws_route_table.dolos_private_route_table.id
+}
+
 resource "aws_vpc" "dolos_vpc" {
   cidr_block       = "10.0.0.0/16"
   enable_dns_support = true
@@ -109,6 +128,16 @@ resource "aws_vpc" "dolos_vpc" {
   tags = {
     Name = "dolos-vpc"
   }
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id       = aws_vpc.dolos_vpc.id
+  service_name = "com.amazonaws.us-east-2.ecr.api"
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id       = aws_vpc.dolos_vpc.id
+  service_name = "com.amazonaws.us-east-2.ecr.dkr"
 }
 
 resource "aws_subnet" "dolos_subnet" {
