@@ -43,66 +43,10 @@ resource "aws_ecr_repository" "dolos_transcript_parser" {
   name = "dolos-repo"
 }
 
-resource "aws_iam_role" "fargate_sqs_role" {
-  name = "FargateSQSAccessRole"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy" "sqs_access" {
-  name        = "FargateSQSAccessPolicy"
-  description = "Allows Fargate tasks to push messages to SQS"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = [
-          "sqs:ReceiveMessage",
-          "sqs:GetQueueUrl"
-        ],
-        Effect   = "Allow",
-        Resource = aws_sqs_queue.terraform_queue.arn
-      }
-    ]
-  })
-}
-
-resource "aws_iam_policy" "dynamodb_full_access" {
-  name        = "FargateDynamoDBFullAccessPolicy"
-  description = "Allows Fargate tasks full access to DynamoDB"
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = "dynamodb:*",
-        Effect = "Allow",
-        Resource = aws_dynamodb_table.dolos_parsed_transcripts.arn
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "fargate_dynamodb_attach" {
-  role       = aws_iam_role.fargate_sqs_role.name
-  policy_arn = aws_iam_policy.dynamodb_full_access.arn
-}
-
-resource "aws_iam_role_policy_attachment" "fargate_sqs_attach" {
-  role       = aws_iam_role.fargate_sqs_role.name
-  policy_arn = aws_iam_policy.sqs_access.arn
+module "permissions" {
+  source              = "./modules/permissions"
+  sqs_queue_arn       = aws_sqs_queue.terraform_queue.arn
+  dynamo_db_table_arn = aws_dynamodb_table.dolos_parsed_transcripts.arn
 }
 
 resource "aws_ecs_cluster" "dolos_cluster" {
@@ -156,8 +100,8 @@ resource "aws_ecs_task_definition" "dolos_transcript_parser" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = aws_iam_role.fargate_sqs_role.arn
-  task_role_arn            = aws_iam_role.fargate_sqs_role.arn
+  execution_role_arn       = module.permissions.FARGATE_ROLE_ARN
+  task_role_arn            = module.permissions.FARGATE_ROLE_ARN
 
   container_definitions = jsonencode([{
     name  = "dolos-parser-container"
