@@ -11,6 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
+builder.Services.AddHostedService<SqsPollingService>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 foreach (Type validator in Assembly.GetExecutingAssembly().ExportedTypes
              .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValidator<>)))

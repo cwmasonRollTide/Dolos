@@ -50,6 +50,32 @@ resource "aws_iam_policy" "dynamodb_full_access" {
   })
 }
 
+resource "aws_iam_policy" "cloudwatch_logs_access" {
+  name        = "DolosFargateCloudWatchLogsAccessPolicy"
+  description = "Allows Fargate tasks to create and use CloudWatch Log Groups"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "fargate_cloudwatch_logs_attach" {
+  role       = aws_iam_role.fargate_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs_access.arn
+}
+
 resource "aws_iam_role_policy_attachment" "fargate_dynamodb_attach" {
   role       = aws_iam_role.fargate_role.name
   policy_arn = aws_iam_policy.dynamodb_full_access.arn
