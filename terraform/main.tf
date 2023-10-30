@@ -132,11 +132,13 @@ resource "aws_vpc" "dolos_vpc" {
 
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id       = aws_vpc.dolos_vpc.id
+  vpc_endpoint_type = "Interface"
   service_name = "com.amazonaws.us-east-2.ecr.api"
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id       = aws_vpc.dolos_vpc.id
+  vpc_endpoint_type = "Interface"
   service_name = "com.amazonaws.us-east-2.ecr.dkr"
 }
 
