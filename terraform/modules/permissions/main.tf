@@ -1,5 +1,5 @@
 ﻿resource "aws_iam_role" "fargate_role" {
-  name = "FargateSQSAccessRole"
+  name = "DolosFargateSQSAccessRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -16,7 +16,7 @@
 }
 
 resource "aws_iam_policy" "sqs_access" {
-  name        = "FargateSQSAccessPolicy"
+  name        = "DolosFargateSQSAccessPolicy"
   description = "Allows Fargate tasks to push messages to SQS"
 
   policy = jsonencode({
@@ -35,7 +35,7 @@ resource "aws_iam_policy" "sqs_access" {
 }
 
 resource "aws_iam_policy" "dynamodb_full_access" {
-  name        = "FargateDynamoDBFullAccessPolicy"
+  name        = "DolosFargateDynamoDBFullAccessPolicy"
   description = "Allows Fargate tasks full access to DynamoDB"
 
   policy = jsonencode({
