@@ -73,6 +73,31 @@ resource "aws_iam_policy" "cloudwatch_logs_access" {
   })
 }
 
+resource "aws_iam_policy" "ecr_access" {
+  name        = "DolosFargateECRAccessPolicy"
+  description = "Allows Fargate tasks to pull images from ECR"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "fargate_ecr_attach" {
+  role       = aws_iam_role.fargate_role.name
+  policy_arn = aws_iam_policy.ecr_access.arn
+}
+
 resource "aws_iam_role_policy_attachment" "fargate_cloudwatch_logs_attach" {
   role       = aws_iam_role.fargate_role.name
   policy_arn = aws_iam_policy.cloudwatch_logs_access.arn
