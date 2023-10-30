@@ -67,6 +67,14 @@ resource "aws_subnet" "dolos_public_subnet" {
   }
 }
 
+resource "aws_internet_gateway" "dolos_igw" {
+  vpc_id = aws_vpc.dolos_vpc.id
+
+  tags = {
+    Name = "dolos-igw"
+  }
+}
+
 resource "aws_nat_gateway" "dolos_nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = aws_subnet.dolos_public_subnet.id
@@ -75,22 +83,23 @@ resource "aws_nat_gateway" "dolos_nat_gateway" {
   }
 }
 
-resource "aws_route_table" "dolos_private_route_table" {
+resource "aws_route_table" "dolos_public_route_table" {
   vpc_id = aws_vpc.dolos_vpc.id
+
   tags = {
-    Name = "dolos-private-route-table"
+    Name = "dolos-public-route-table"
   }
 }
 
-resource "aws_route" "private_nat_gateway_route" {
-  route_table_id         = aws_route_table.dolos_private_route_table.id
+resource "aws_route" "public_igw_route" {
+  route_table_id         = aws_route_table.dolos_public_route_table.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.dolos_nat_gateway.id
+  gateway_id             = aws_internet_gateway.dolos_igw.id
 }
 
-resource "aws_route_table_association" "dolos_subnet_association" {
-  subnet_id      = aws_subnet.dolos_subnet.id
-  route_table_id = aws_route_table.dolos_private_route_table.id
+resource "aws_route_table_association" "dolos_public_subnet_association" {
+  subnet_id      = aws_subnet.dolos_public_subnet.id
+  route_table_id = aws_route_table.dolos_public_route_table.id
 }
 
 resource "aws_vpc" "dolos_vpc" {
