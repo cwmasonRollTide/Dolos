@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Amazon;
+using MediatR;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using DolosTranscriptParser.Commands.ParseTranscript;
@@ -17,7 +18,7 @@ public class SqsPollingService : BackgroundService
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var client = new AmazonSQSClient();
+        var client = new AmazonSQSClient(RegionEndpoint.USEast2);
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -47,6 +48,12 @@ public class SqsPollingService : BackgroundService
                 }, stoppingToken);
                 
                 if (saveToStorage.Success) Console.WriteLine($"Successfully saved interview prompt and completions");
+                
+                await client.DeleteMessageAsync(new DeleteMessageRequest
+                {
+                    QueueUrl = Environment.GetEnvironmentVariable("SQS_QUEUE_URL"),
+                    ReceiptHandle = message.ReceiptHandle
+                }, stoppingToken);
             }));
         }
     }

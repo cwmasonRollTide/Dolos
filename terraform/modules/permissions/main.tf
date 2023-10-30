@@ -25,7 +25,9 @@ resource "aws_iam_policy" "sqs_access" {
       {
         Action = [
           "sqs:ReceiveMessage",
-          "sqs:GetQueueUrl"
+          "sqs:GetQueueUrl",
+          "sqs:GetQueueAttributes",
+          "sqs:DeleteMessage"
         ],
         Effect   = "Allow",
         Resource = var.sqs_queue_arn
