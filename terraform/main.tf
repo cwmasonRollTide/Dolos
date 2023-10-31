@@ -26,7 +26,7 @@ resource "aws_sqs_queue" "terraform_queue_deadletter" {
 }
 
 ## TranscriptParser will be listening to this queue and processing each interview
-## as a single item. should be in cluster and 
+## as a single item. should be in cluster and scale up to 5 instances
 resource "aws_sqs_queue" "terraform_queue" {
   name                      = "dolos-ingestion-queue"
   delay_seconds             = 90
@@ -49,6 +49,12 @@ module "permissions" {
   dynamo_db_table_arn = aws_dynamodb_table.dolos_parsed_transcripts.arn
 }
 
+# Beyond is the fargate usage / autoscaling of DolosTranscriptParser
+# The background service in that container is polling the SQS queue
+# that was populated by running DolosIngestion locally and sending the 
+# https://transcripts.cnn.com/show/lkl base url to the local endpoint.
+# As long as you have the SQS_QUEUE_URL, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY
+# in a .env file within DolosIngestion
 resource "aws_ecs_cluster" "dolos_cluster" {
   name = "dolos-cluster"
 }
