@@ -1,6 +1,5 @@
-﻿using Amazon.DynamoDBv2.Model;
+﻿using MediatR;
 using DolosTranscriptParser.Repos;
-using MediatR;
 
 namespace DolosTranscriptParser.Commands.SavePrompts;
 
@@ -18,17 +17,7 @@ public class SavePromptsHandler : IRequestHandler<SavePromptsRequest, SavePrompt
         var isSuccessful = false;
         try
         {
-            List<AttributeValue> newPrompts = request.Prompts!.Select(p => new AttributeValue
-            {
-                M = new Dictionary<string, AttributeValue>
-                {
-                    {"prompt", new AttributeValue { S = p.Prompt }},
-                    {"completion", new AttributeValue { S = p.Completion }}
-                }
-            }).ToList();
-
-            await _dynamoRepo.UpdateOrInsertGuestDataAsync(request.Guest!, newPrompts);
-
+            await _dynamoRepo.UpdateOrInsertGuestDataAsync(request.Guest!, request.Prompts!);
             isSuccessful = true;
         }
         catch (Exception e)

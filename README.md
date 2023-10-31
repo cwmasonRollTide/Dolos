@@ -6,6 +6,7 @@
 ### DolosIngestion
 - Run this part locally using a .env file at the root of DolosIngestion/ to 
 set your AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and SQS_QUEUE_URL environment variables
+  - You get the SQS_QUEUE_URL from the Terraform apply
 - Send GET request using postman or curl, to your 
 http://localhost:{port}/ingest?url=https://transcripts.cnn.com/show/lkl
 - in order to kick off processing of all the transcripts for this show. Should be other
@@ -39,6 +40,7 @@ to train an openAi model
   at http://transcripts.cnn.com/show/lkl
 - Fargate task for autoscaling dockerized DolosTranscriptParser. Scales from 1 to 5
 instances of the consuming container that each process five messages from the queue at a time
+- Terraform.io connection needs to define environment variables in pipeline for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
 
 ### Github Action in .github/workflows/workflow.yml
 - requires AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY in your github actions secrets

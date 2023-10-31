@@ -1,11 +1,12 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using DolosTranscriptParser.Models;
 
 namespace DolosTranscriptParser.Repos;
 
 public interface IDynamoDbRepository
 {
-    Task UpdateOrInsertGuestDataAsync(string guest, List<AttributeValue> newPrompts);
+    Task UpdateOrInsertGuestDataAsync(string guest, IEnumerable<PromptCompletionPair> prompts);
 }
 
 public class DynamoDbRepository : IDynamoDbRepository
@@ -18,8 +19,17 @@ public class DynamoDbRepository : IDynamoDbRepository
         _client = new AmazonDynamoDBClient();
     }
 
-    public async Task UpdateOrInsertGuestDataAsync(string guest, List<AttributeValue> newPrompts)
+    public async Task UpdateOrInsertGuestDataAsync(string guest, IEnumerable<PromptCompletionPair> prompts)
     {
+        List<AttributeValue> newPrompts = prompts.Select(p => new AttributeValue
+        {
+            M = new Dictionary<string, AttributeValue>
+            {
+                {"prompt", new AttributeValue { S = p.Prompt }},
+                {"completion", new AttributeValue { S = p.Completion }}
+            }
+        }).ToList();
+        
         var queryRequest = new QueryRequest
         {
             TableName = _tableName,

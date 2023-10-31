@@ -1,4 +1,6 @@
-﻿namespace DolosTranscriptParser.Services.Background;
+﻿using FluentValidation.Results;
+
+namespace DolosTranscriptParser.Services.Background;
 
 using FluentValidation;
 using MediatR;
@@ -20,7 +22,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
     public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var context = new ValidationContext<TRequest>(request);
-        var failures = _validators
+        List<ValidationFailure> failures = _validators
             .Select(v => v.Validate(context))
             .SelectMany(result => result.Errors)
             .Where(f => f != null)

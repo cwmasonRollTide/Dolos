@@ -2,14 +2,14 @@
 using MediatR;
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using DolosTranscriptParser.Commands.ParseTranscript;
 using DolosTranscriptParser.Commands.SavePrompts;
+using DolosTranscriptParser.Commands.ParseTranscript;
 
 namespace DolosTranscriptParser.Services.Background;
 
 public class SqsPollingService : BackgroundService
 {
-    private ISender _mediator;
+    private readonly ISender _mediator;
 
     public SqsPollingService(ISender mediator)
     {
@@ -25,7 +25,7 @@ public class SqsPollingService : BackgroundService
             var request = new ReceiveMessageRequest
             {
                 QueueUrl = Environment.GetEnvironmentVariable("SQS_QUEUE_URL"),
-                MaxNumberOfMessages = 5
+                MaxNumberOfMessages = 2
             };
             ReceiveMessageResponse? response = await client.ReceiveMessageAsync(request, stoppingToken);
             

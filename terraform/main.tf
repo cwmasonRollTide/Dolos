@@ -238,9 +238,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs_messages_visible" {
   evaluation_periods  = "2"
   metric_name         = "ApproximateNumberOfMessagesVisible"
   namespace           = "AWS/SQS"
-  period              = "300"
+  period              = "100"
   statistic           = "Average"
-  threshold           = "10"
+  threshold           = "1"
   alarm_description   = "Alarm when there are too many messages in the queue"
   alarm_actions       = [aws_appautoscaling_policy.scale_out_policy.arn]
   dimensions = {
