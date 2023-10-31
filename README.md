@@ -10,6 +10,7 @@ set your AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and SQS_QUEUE_URL environment
 http://localhost:{port}/ingest?url=https://transcripts.cnn.com/show/lkl
 - in order to kick off processing of all the transcripts for this show. Should be other
 - shows we can find and update the parser so it can handle more interview transcript formats
+- https://transcripts.cnn.com/show/sotu
 
 ### DolosTranscriptParser
 - Listens to the SQS queue defined in terraform directory. 

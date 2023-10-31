@@ -31,7 +31,7 @@ resource "aws_sqs_queue" "terraform_queue" {
   name                      = "dolos-ingestion-queue"
   delay_seconds             = 90
   max_message_size          = 2048
-  message_retention_seconds = 86400
+  message_retention_seconds = 1209600
   receive_wait_time_seconds = 10
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.terraform_queue_deadletter.arn
@@ -184,8 +184,8 @@ resource "aws_ecs_task_definition" "dolos_transcript_parser" {
   family                   = "dolos-transcript-parser"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  cpu                      = "1024"
+  memory                   = "2048"
   execution_role_arn       = module.permissions.FARGATE_ROLE_ARN
   task_role_arn            = module.permissions.FARGATE_ROLE_ARN
 
@@ -205,7 +205,15 @@ resource "aws_ecs_task_definition" "dolos_transcript_parser" {
         name  = "SQS_QUEUE_URL",
         value = aws_sqs_queue.terraform_queue.url
       }
-    ]
+    ],
+    logConfiguration = {
+      logDriver = "awslogs",
+      options = {
+        "awslogs-group"         = "/ecs/dolos-transcript-parser",
+        "awslogs-region"        = var.aws_region,
+        "awslogs-stream-prefix" = "ecs"
+      }
+    }
   }])
 }
 
@@ -242,8 +250,8 @@ resource "aws_cloudwatch_metric_alarm" "sqs_messages_visible" {
 
 # Define ECS service auto scaling
 resource "aws_appautoscaling_target" "ecs_target" {
-  max_capacity       = 5 # Maximum number of tasks
-  min_capacity       = 1 # Minimum number of tasks
+  max_capacity       = 10 # Maximum number of tasks
+  min_capacity       = 0 # Minimum number of tasks
   resource_id        = "service/${aws_ecs_cluster.dolos_cluster.name}/${aws_ecs_service.dolos_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
