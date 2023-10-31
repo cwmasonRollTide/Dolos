@@ -31,29 +31,36 @@ public class SqsPollingService : BackgroundService
             
             await Task.WhenAll(response.Messages.Select(async message => 
             {
-                Console.WriteLine("New message received, url:");
-                Console.WriteLine(message.Body);
-                
-                ParseTranscriptResponse promptTokens = await _mediator.Send(new ParseTranscriptRequest
+                try
                 {
-                    TranscriptUrl = message.Body
-                }, stoppingToken);
+                    Console.WriteLine("New message received, url:");
+                    Console.WriteLine(message.Body);
                 
-                Console.WriteLine($"Transcript processed successfully for url: {message.Body}");
+                    ParseTranscriptResponse promptTokens = await _mediator.Send(new ParseTranscriptRequest
+                    {
+                        TranscriptUrl = message.Body
+                    }, stoppingToken);
                 
-                SavePromptsResponse saveToStorage = await _mediator.Send(new SavePromptsRequest
+                    Console.WriteLine($"Transcript processed successfully for url: {message.Body}");
+                
+                    SavePromptsResponse saveToStorage = await _mediator.Send(new SavePromptsRequest
+                    {
+                        Guest = promptTokens.Guest,
+                        Prompts = promptTokens.Prompts
+                    }, stoppingToken);
+                
+                    if (saveToStorage.Success) Console.WriteLine($"Successfully saved interview prompt and completions");
+                
+                    await client.DeleteMessageAsync(new DeleteMessageRequest
+                    {
+                        QueueUrl = Environment.GetEnvironmentVariable("SQS_QUEUE_URL"),
+                        ReceiptHandle = message.ReceiptHandle
+                    }, stoppingToken);
+                }
+                catch (Exception e)
                 {
-                    Guest = promptTokens.Guest,
-                    Prompts = promptTokens.Prompts
-                }, stoppingToken);
-                
-                if (saveToStorage.Success) Console.WriteLine($"Successfully saved interview prompt and completions");
-                
-                await client.DeleteMessageAsync(new DeleteMessageRequest
-                {
-                    QueueUrl = Environment.GetEnvironmentVariable("SQS_QUEUE_URL"),
-                    ReceiptHandle = message.ReceiptHandle
-                }, stoppingToken);
+                    Console.WriteLine(e);
+                }
             }));
         }
     }

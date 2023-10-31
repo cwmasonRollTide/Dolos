@@ -266,11 +266,11 @@ resource "aws_appautoscaling_policy" "scale_out_policy" {
 
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
-    cooldown                = 300
+    cooldown                = 200
     metric_aggregation_type = "Average"
 
     step_adjustment {
-      scaling_adjustment          = 1
+      scaling_adjustment          = 2
       metric_interval_lower_bound = 0
     }
   }
@@ -285,7 +285,7 @@ resource "aws_appautoscaling_policy" "scale_in_policy" {
 
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
-    cooldown                = 300
+    cooldown                = 200
     metric_aggregation_type = "Average"
 
     step_adjustment {
