@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-dolosportal-dev-224013-authRole",
+      "UnauthRoleArn": "arn:aws:iam::592128653009:role/amplify-dolosportal-dev-224013-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::592128653009:role/amplify-dolosportal-dev-224013-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-dolosportal-dev-224013-deployment",
+      "UnauthRoleName": "amplify-dolosportal-dev-224013-unauthRole",
+      "StackName": "amplify-dolosportal-dev-224013",
+      "StackId": "arn:aws:cloudformation:us-east-2:592128653009:stack/amplify-dolosportal-dev-224013/fd17dd90-785f-11ee-beb4-0af3a1395b33",
+      "AmplifyAppId": "d337iplvglsekf"
+    }
+  }
+}
