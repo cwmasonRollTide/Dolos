@@ -10,6 +10,23 @@
       "StackName": "amplify-dolosportal-dev-224013",
       "StackId": "arn:aws:cloudformation:us-east-2:592128653009:stack/amplify-dolosportal-dev-224013/fd17dd90-785f-11ee-beb4-0af3a1395b33",
       "AmplifyAppId": "d337iplvglsekf"
+    },
+    "categories": {
+      "storage": {
+        "dolosparsedinterviewtranscripts": {
+          "tableName": "dolos-parsed-interview-transcripts",
+          "region": "us-east-2",
+          "arn": "arn:aws:dynamodb:us-east-2:592128653009:table/dolos-parsed-interview-transcripts",
+          "partitionKeyName": "guest",
+          "partitionKeyType": "S"
+        }
+      },
+      "auth": {
+        "dolosportal69e26132": {}
+      },
+      "api": {
+        "dolosportal": {}
+      }
     }
   }
 }

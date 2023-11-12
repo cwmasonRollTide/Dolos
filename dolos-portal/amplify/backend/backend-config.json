@@ -1,1 +1,103 @@
-{}
+{
+  "api": {
+    "dolosportal": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "dolosportal69e26132": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_storage_dolosparsedinterviewtranscripts_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "dolosparsedinterviewtranscripts"
+        }
+      ]
+    },
+    "AMPLIFY_storage_dolosparsedinterviewtranscripts_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "dolosparsedinterviewtranscripts"
+        }
+      ]
+    },
+    "AMPLIFY_storage_dolosparsedinterviewtranscripts_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "dolosparsedinterviewtranscripts"
+        }
+      ]
+    },
+    "AMPLIFY_storage_dolosparsedinterviewtranscripts_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "dolosparsedinterviewtranscripts"
+        }
+      ]
+    },
+    "AMPLIFY_storage_dolosparsedinterviewtranscripts_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "dolosparsedinterviewtranscripts"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "dolosparsedinterviewtranscripts": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    }
+  }
+}
