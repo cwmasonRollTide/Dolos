@@ -2,6 +2,14 @@
   type    = string
 }
 
-variable "sqs_queue_arn" {
+variable "env" {
   type    = string
 }
+
+variable "s3_bucket_arn" {
+  type    = string
+}
+
+#variable "sqs_queue_arn" {
+#  type    = string
+#}

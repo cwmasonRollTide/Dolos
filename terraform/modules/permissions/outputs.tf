@@ -1,3 +1,3 @@
-﻿output "FARGATE_ROLE_ARN" {
-  value     = aws_iam_role.fargate_role.arn
+﻿output "MAIN_ROLE_ARN" {
+  value     = aws_iam_role.main_role.arn
 }

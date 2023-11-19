@@ -1,5 +1,0 @@
-type Interview @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  guest: String
-  prompts: [AWSJSON]
-}
