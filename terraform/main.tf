@@ -48,7 +48,7 @@ module "retrieve_celebrity_names" {
   function_name       = "retrieve-celebrity-names"
   role_arn            = module.permissions.MAIN_ROLE_ARN
   dynamodb_table_name = aws_dynamodb_table.dolos_parsed_transcripts.name
-  s3_bucket           = aws_s3_bucket.images_bucket.name
+  s3_bucket           = aws_s3_bucket.images_bucket.bucket
   gateway_http_method = "GET"
 }
 
@@ -58,7 +58,7 @@ module "retrieve_celebrity_training_data" {
   function_name       = "retrieve-celebrity-training-data"
   role_arn            = module.permissions.MAIN_ROLE_ARN
   dynamodb_table_name = aws_dynamodb_table.dolos_parsed_transcripts.name
-  s3_bucket           = aws_s3_bucket.images_bucket.name
+  s3_bucket           = aws_s3_bucket.images_bucket.bucket
   gateway_http_method = "GET"
 }
 
@@ -68,6 +68,6 @@ module "save_celebrity_training_data" {
   function_name       = "save-celebrity-training-data"
   role_arn            = module.permissions.MAIN_ROLE_ARN
   dynamodb_table_name = aws_dynamodb_table.dolos_parsed_transcripts.name
-  s3_bucket           = aws_s3_bucket.images_bucket.name
+  s3_bucket           = aws_s3_bucket.images_bucket.bucket
   gateway_http_method = "PUT"
 }
