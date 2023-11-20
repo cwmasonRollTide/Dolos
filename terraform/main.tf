@@ -25,6 +25,16 @@ resource "aws_s3_bucket" "images_bucket" {
   name    = "dolos-celebrity-images"
 }
 
+resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
+  bucket = aws_s3_bucket.images_bucket.bucket
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
+    allowed_origins = ["*"]
+  }
+}
+
 module "permissions" {
   source              = "./modules/permissions"
   env                 = var.env
