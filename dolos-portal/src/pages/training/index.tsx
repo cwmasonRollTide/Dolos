@@ -21,7 +21,7 @@ const trainingData: CelebrityTrainingData =
 }
 
 // This api call first to populate dropdown
-const guests: string[] = ["Tom Cruise", "Tom Hanks", "Tom Brady", "Tom Holland", "Tom Felton", "Tom Hardy", "Tom Holl"];
+// const guests: string[] = ["Tom Cruise", "Tom Hanks", "Tom Brady", "Tom Holland", "Tom Felton", "Tom Hardy", "Tom Holl"];
 
 const Training: React.FC = () => {
   const [guests, setGuests] = useState<string[]>([]);
@@ -32,18 +32,35 @@ const Training: React.FC = () => {
   const [promptCompletionPairs, setPromptCompletionPairs] = useState<CelebrityTrainingData>(trainingData);
   
   useEffect(() => {
-    fetch(process.env.REACT_APP_RETRIEVE_CELEB_NAMES_URL as string).then((response) => {
-      return response.json();
-    }).then((data) => {
-      setGuests(data);
-    }).catch((err) => {
-      console.log(err);
-    });
+    // fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', { method: "GET" })
+    //   .then((response) => {
+    //     return response.json();
+    //   }).then((data) => {
+    //     setGuests(data.body);
+    //   }).catch((err) => {
+    //     console.log(err);
+    //   });
+    async function fetchNames() {
+      try {
+        const response = await fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', {method: "GET"});
+
+        if (!response.ok) {
+          alert('Failed to fetch guest names.');
+        }
+
+        const data = await response.json();
+        setGuests(data.body);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchNames();
   }, []);
   
   useEffect(() => {
     // Fetch the training data for the selected guest
-  }, [guest]);
+  }, [guests]);
   
   const handleGuestDropdownChange = (event: any) => {
     setGuest(event.target.value as string);
@@ -119,8 +136,8 @@ const Training: React.FC = () => {
       </Box>
       <Grid container>
         {promptCompletionPairs.prompts.map((promptCompletionPair, index) => (
-          <Grid xs={12} key={index} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
-            <Grid xs={6}>
+          <Grid item xs={12} key={index} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
+            <Grid item xs={6}>
               <TextField
                 label="Prompt"
                 variant="outlined"
@@ -129,7 +146,7 @@ const Training: React.FC = () => {
                 onChange={(e) => handlePromptChange(index, e.target.value)}
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid item xs={6}>
               <TextField
                 label="Completion"
                 variant="outlined"
@@ -143,7 +160,7 @@ const Training: React.FC = () => {
             </IconButton>
           </Grid>
         ))}
-        <Grid xs={12} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
+        <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
           <Grid item xs={6}>
             <TextField
               label="New Prompt"
@@ -156,7 +173,7 @@ const Training: React.FC = () => {
               }}
             />
           </Grid>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <TextField
               label="New Completion"
               variant="outlined"

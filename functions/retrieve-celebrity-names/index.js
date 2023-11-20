@@ -1,10 +1,9 @@
-const { DynamoDBClient, QueryCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
 const dynamoDBClient = new DynamoDBClient({ region: "us-east-2" });
 
 exports.handler = async (event) => {
 	const params = {
 		TableName: process.env.TABLE_NAME,
-		IndexName: 'Guest',
 		ProjectionExpression: "#guest",
 		ExpressionAttributeNames: {
 			"#guest": "guest"
@@ -12,9 +11,7 @@ exports.handler = async (event) => {
 	};
 
 	try {
-		console.log("Params for DynamoDB Query:", JSON.stringify(params, null, 2));
-		const result = await dynamoDBClient.send(new QueryCommand(params));
-		console.log(JSON.stringify(result));
+		const result = await dynamoDBClient.send(new ScanCommand(params));
 		const guests = result.Items.map(item => item.guest.S);
 		return {
 			"statusCode": 200,
@@ -26,7 +23,7 @@ exports.handler = async (event) => {
 			"body": JSON.stringify(guests)
 		};
 	} catch (error) {
-		console.error("Error querying DynamoDB:", error.message);
+		console.error("Error scanning DynamoDB:", error.message);
 		return { statusCode: 500, body: "Internal Server Error" };
 	}
 };
