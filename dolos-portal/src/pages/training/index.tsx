@@ -24,11 +24,22 @@ const trainingData: CelebrityTrainingData =
 const guests: string[] = ["Tom Cruise", "Tom Hanks", "Tom Brady", "Tom Holland", "Tom Felton", "Tom Hardy", "Tom Holl"];
 
 const Training: React.FC = () => {
+  const [guests, setGuests] = useState<string[]>([]);
   const [guest, setGuest] = useState<string>(guests[0]);
   const [newPrompt, setNewPrompt] = useState<string>('');
   const [newCompletion, setNewCompletion] = useState<string>('');
   const [needsToSave, setNeedsToSave] = useState<boolean>(false);
   const [promptCompletionPairs, setPromptCompletionPairs] = useState<CelebrityTrainingData>(trainingData);
+  
+  useEffect(() => {
+    fetch(process.env.REACT_APP_RETRIEVE_CELEB_NAMES_URL as string).then((response) => {
+      return response.json();
+    }).then((data) => {
+      setGuests(data);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }, []);
   
   useEffect(() => {
     // Fetch the training data for the selected guest

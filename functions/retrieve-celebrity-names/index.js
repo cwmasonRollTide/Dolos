@@ -2,11 +2,6 @@ const { DynamoDBClient, QueryCommand } = require("@aws-sdk/client-dynamodb");
 const dynamoDBClient = new DynamoDBClient({ region: "us-east-2" });
 
 exports.handler = async (event) => {
-	const guest = event.queryStringParameters?.guest;
-	if (!guest) {
-		return { statusCode: 400, body: "Email is required" };
-	}
-
 	const params = {
 		TableName: process.env.TABLE_NAME,
 		IndexName: 'Guest',
