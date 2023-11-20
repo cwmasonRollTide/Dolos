@@ -1,27 +1,34 @@
 import React, {useEffect, useState} from 'react'
 import { CelebrityTrainingData } from '../../interfaces/CelebrityTrainingData';
-import {Box, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from "@mui/material";
+import {
+  Box,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography
+} from "@mui/material";
 import { IconButton, TextField, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import GuestDropDown from "../../components/guest-drop-down";
 
 
 // To Come from API calls
-const trainingData: CelebrityTrainingData =
-{
+const trainingData: CelebrityTrainingData = {
   guest: "Tom Cruise",
   image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tom_Cruise_avp_2014_4.jpg/220px-Tom_Cruise_avp_2014_4.jpg",
   prompts: [{
     prompt: "What is your favorite movie?",
     completion: "My favorite movie is Top Gun."
-  },{
+  }, {
     prompt: "What is your favorite movie?",
     completion: "My favorite movie is Top Gun."
   }]
 }
-
-// This api call first to populate dropdown
-// const guests: string[] = ["Tom Cruise", "Tom Hanks", "Tom Brady", "Tom Holland", "Tom Felton", "Tom Hardy", "Tom Holl"];
 
 const Training: React.FC = () => {
   const [guests, setGuests] = useState<string[]>([]);
@@ -32,58 +39,28 @@ const Training: React.FC = () => {
   const [promptCompletionPairs, setPromptCompletionPairs] = useState<CelebrityTrainingData>(trainingData);
   
   useEffect(() => {
-    // fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', { method: "GET" })
-    //   .then((response) => {
-    //     return response.json();
-    //   }).then((data) => {
-    //     setGuests(data.body);
-    //   }).catch((err) => {
-    //     console.log(err);
-    //   });
-    async function fetchNames() {
-      try {
-        const response: Response = await fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', {method: "GET"});
-
-        if (!response.ok) {
-          alert('Failed to fetch guest names.');
-        }
-        const guests = await response.json();
-        setGuests(guests);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchNames();
-  }, []);
-  
-  useEffect(() => {
     // Fetch the training data for the selected guest
   }, [guests]);
   
-  const handleGuestDropdownChange = (event: any) => {
-    setGuest(event.target.value as string);
-  }
-  
   const handlePromptChange = (index: number, newPrompt: string) => {
+    setNeedsToSave(true);
     const updatedPairs = promptCompletionPairs.prompts.map((pair, pairIndex) => {
       if (index === pairIndex) {
         return { ...pair, prompt: newPrompt };
       }
       return pair;
     });
-    setNeedsToSave(true);
     setPromptCompletionPairs({ ...promptCompletionPairs, prompts: updatedPairs });
   };
   
   const handleCompletionChange = (index: number, newCompletion: string) => {
+    setNeedsToSave(true);
     const updatedPairs = promptCompletionPairs.prompts.map((pair, pairIndex) => {
       if (index === pairIndex) {
         return { ...pair, completion: newCompletion };
       }
       return pair;
     });
-    setNeedsToSave(true);
     setPromptCompletionPairs({ ...promptCompletionPairs, prompts: updatedPairs });
   };
   
@@ -106,87 +83,81 @@ const Training: React.FC = () => {
     // API call to save data or any other logic
     setNeedsToSave(false);
   };
-  
+
   return (
     <Container>
+      <GuestDropDown onGuestChange={(e: SelectChangeEvent) => setGuest(e.target.value)} guest={guest}/>
       <Box display="flex" justifyContent="center" my={2}>
-        <FormControl variant="standard" sx={{ minWidth: 250 }}>
-          <InputLabel id="demo-simple-select-standard-label">Celebrity</InputLabel>
-          <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            value={guest}
-            onChange={handleGuestDropdownChange}
-            label="Guest"
-          >
-            {guests.map((guest: string) => (
-              <MenuItem key={guest} value={guest}>{guest}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <Box display="flex" justifyContent="center" my={2}>
-        <Typography variant="h2">{guest}</Typography>
+        <Typography variant="h4">{guest}</Typography>
       </Box>
       <Box display="flex" justifyContent="left" my={2}>
         <Button variant="contained" onClick={handleSave} disabled={!needsToSave}>
           Save
         </Button>
       </Box>
-      <Grid container>
+      <Grid container spacing={2}>
         {promptCompletionPairs.prompts.map((promptCompletionPair, index) => (
           <Grid item xs={12} key={index} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
-            <Grid item xs={6}>
-              <TextField
-                label="Prompt"
-                variant="outlined"
-                style={{ width: '100%' }}
-                value={promptCompletionPair.prompt}
-                onChange={(e) => handlePromptChange(index, e.target.value)}
-              />
+            <Grid container spacing={1}>
+              <Grid item xs={11} md={5}>
+                <TextField
+                  label="Prompt"
+                  variant="outlined"
+                  fullWidth
+                  value={promptCompletionPair.prompt}
+                  onChange={(e) => handlePromptChange(index, e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={11} md={5}>
+                <TextField
+                  label="Completion"
+                  variant="outlined"
+                  fullWidth
+                  value={promptCompletionPair.completion}
+                  onChange={(e) => handleCompletionChange(index, e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={1} sx={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton onClick={() => handleDelete(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Completion"
-                variant="outlined"
-                style={{ width: '100%' }}
-                value={promptCompletionPair.completion}
-                onChange={(e) => handleCompletionChange(index, e.target.value)}
-              />
-            </Grid>
-            <IconButton onClick={() => handleDelete(index)}>
-              <DeleteIcon />
-            </IconButton>
+            
           </Grid>
         ))}
         <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: '1em' }}>
-          <Grid item xs={6}>
-            <TextField
-              label="New Prompt"
-              variant="outlined"
-              fullWidth
-              value={newPrompt}
-              onChange={(e) => {
-                setNewPrompt(e.target.value)
-                setNeedsToSave(true);
-              }}
-            />
+          <Grid container spacing={1}>
+            <Grid item xs={11} md={5}>
+              <TextField
+                label="New Prompt"
+                variant="outlined"
+                fullWidth
+                value={newPrompt}
+                onChange={(e) => {
+                  setNewPrompt(e.target.value);
+                  setNeedsToSave(true);
+                }}
+              />
+            </Grid>
+            <Grid item xs={11} md={5}>
+              <TextField
+                label="New Completion"
+                variant="outlined"
+                fullWidth
+                value={newCompletion}
+                onChange={(e) => {
+                  setNewCompletion(e.target.value)
+                  setNeedsToSave(true);
+                }}
+              />
+            </Grid>
+            <Grid item xs={1} sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton onClick={handleAddPair} disabled={!needsToSave}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="New Completion"
-              variant="outlined"
-              fullWidth
-              value={newCompletion}
-              onChange={(e) => {
-                setNewCompletion(e.target.value)
-                setNeedsToSave(true);
-              }}
-            />
-          </Grid>
-          <IconButton onClick={() => handleAddPair()} disabled={!needsToSave}>
-            <AddIcon />
-          </IconButton>
         </Grid>
       </Grid>
     </Container>
