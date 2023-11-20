@@ -15,6 +15,7 @@ import { IconButton, TextField, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import GuestDropDown from "../../components/guest-drop-down";
+import {Train} from "@mui/icons-material";
 
 
 // To Come from API calls
@@ -31,16 +32,30 @@ const trainingData: CelebrityTrainingData = {
 }
 
 const Training: React.FC = () => {
-  const [guests, setGuests] = useState<string[]>([]);
-  const [guest, setGuest] = useState<string>(guests[0]);
+  const [guest, setGuest] = useState<string>();
   const [newPrompt, setNewPrompt] = useState<string>('');
   const [newCompletion, setNewCompletion] = useState<string>('');
   const [needsToSave, setNeedsToSave] = useState<boolean>(false);
   const [promptCompletionPairs, setPromptCompletionPairs] = useState<CelebrityTrainingData>(trainingData);
   
   useEffect(() => {
-    // Fetch the training data for the selected guest
-  }, [guests]);
+    async function retrieveTrainingData()
+    {
+      try {
+        var response = await fetch(`${process.env.REACT_APP_RETRIEVE_CELEB_TRAINING_DATA as string}?guest=${guest}`);
+        if (!response.ok) {
+          alert('Failed to fetch guest training data.');
+        }
+        const trainingData = await response.json();
+        console.log('Training', trainingData);
+        setPromptCompletionPairs(trainingData);
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    if (guest)
+      retrieveTrainingData();
+  }, [guest]);
   
   const handlePromptChange = (index: number, newPrompt: string) => {
     setNeedsToSave(true);
