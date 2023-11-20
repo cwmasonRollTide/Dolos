@@ -22,7 +22,7 @@ resource "aws_dynamodb_table" "dolos_parsed_transcripts" {
 }
 
 resource "aws_s3_bucket" "images_bucket" {
-  name    = "dolos-celebrity-images"
+  bucket    = "dolos-celebrity-images"
 }
 
 resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
