@@ -115,7 +115,7 @@ resource "aws_iam_policy" "ecr_access" {
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
-  name        = "S3AccessPolicy-${var.env}"
+  name        = "dolos-s3-access-policy-${var.env}"
   description = "Policy to allow Lambda to access S3 Bucket"
 
   policy = jsonencode({
