@@ -42,14 +42,13 @@ const Training: React.FC = () => {
     //   });
     async function fetchNames() {
       try {
-        const response = await fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', {method: "GET"});
+        const response: Response = await fetch('https://dif3ovsktk.execute-api.us-east-2.amazonaws.com/dev', {method: "GET"});
 
         if (!response.ok) {
           alert('Failed to fetch guest names.');
         }
-
-        const data = await response.json();
-        setGuests(data.body);
+        const guests = await response.json();
+        setGuests(guests);
       } catch (error) {
         console.error(error);
       }
