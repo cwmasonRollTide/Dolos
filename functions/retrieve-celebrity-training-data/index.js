@@ -1,5 +1,7 @@
 const { DynamoDBClient, QueryCommand } = require("@aws-sdk/client-dynamodb");
 const dynamoDBClient = new DynamoDBClient({ region: "us-east-2" });
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 exports.handler = async (event) => {
 	const guest = event.queryStringParameters?.guest;
@@ -25,9 +27,16 @@ exports.handler = async (event) => {
 		}
 
 		const item = result.Items[0]; // Assuming only one item per guest
-
+		const signedUrl = await getSignedUrl(
+			S3Client,
+			new GetObjectCommand({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Key: item.image
+			})
+		);
 		// Format data into the required structure
 		const formattedData = {
+			image: signedUrl,
 			guest: item.guest.S, // Assuming 'guest' is stored as a string
 			prompts: item.prompts.L.map(promptItem => ({
 				prompt: promptItem.M.prompt.S,

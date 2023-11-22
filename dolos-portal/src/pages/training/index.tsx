@@ -25,14 +25,12 @@ const trainingData: CelebrityTrainingData = {
   prompts: [{
     prompt: "What is your favorite movie?",
     completion: "My favorite movie is Top Gun."
-  }, {
-    prompt: "What is your favorite movie?",
-    completion: "My favorite movie is Top Gun."
   }]
 }
 
 const Training: React.FC = () => {
   const [guest, setGuest] = useState<string>();
+  const [ image, setImage ] = useState<File | null>(null);
   const [newPrompt, setNewPrompt] = useState<string>('');
   const [newCompletion, setNewCompletion] = useState<string>('');
   const [needsToSave, setNeedsToSave] = useState<boolean>(false);
@@ -94,8 +92,18 @@ const Training: React.FC = () => {
     setNeedsToSave(false);
   };
   
-  const handleSave = () => {
-    // API call to save data or any other logic
+  const handleSave = async () => {
+    const formData = new FormData();
+
+    formData.append('prompts', JSON.stringify(promptCompletionPairs));
+
+    if (image) {
+      formData.append('image', image);
+    }
+    const response = await fetch(process.env.REACT_APP_SAVE_CELEB_TRAINING_DATA as string, {
+      method: 'PUT',
+      body: formData
+    });
     setNeedsToSave(false);
   };
 
@@ -104,6 +112,10 @@ const Training: React.FC = () => {
       <GuestDropDown onGuestChange={(e: SelectChangeEvent) => setGuest(e.target.value)} guest={guest}/>
       <Box display="flex" justifyContent="center" my={2}>
         <Typography variant="h4">{guest}</Typography>
+        <input
+          type="file"
+          onChange={(e: any) => setImage(e.target.files[0])}
+        />
       </Box>
       <Box display="flex" justifyContent="left" my={2}>
         <Button variant="contained" onClick={handleSave} disabled={!needsToSave}>
