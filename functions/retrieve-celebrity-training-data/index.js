@@ -27,13 +27,17 @@ exports.handler = async (event) => {
 		}
 
 		const item = result.Items[0]; // Assuming only one item per guest
-		const signedUrl = await getSignedUrl(
-			S3Client,
-			new GetObjectCommand({
-				Bucket: process.env.S3_BUCKET_NAME,
-				Key: item.image
-			})
-		);
+		let signedUrl = '';
+		if (item.image)
+		{
+			signedUrl = await getSignedUrl(
+				S3Client,
+				new GetObjectCommand({
+					Bucket: process.env.S3_BUCKET_NAME,
+					Key: item.image
+				})
+			);
+		}
 		// Format data into the required structure
 		const formattedData = {
 			image: signedUrl,
