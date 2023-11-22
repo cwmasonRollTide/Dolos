@@ -69,5 +69,5 @@ module "save_celebrity_training_data" {
   role_arn            = module.permissions.MAIN_ROLE_ARN
   dynamodb_table_name = aws_dynamodb_table.dolos_parsed_transcripts.name
   s3_bucket           = aws_s3_bucket.images_bucket.bucket
-  gateway_http_method = "PUT"
+  gateway_http_method = "POST"
 }

@@ -96,14 +96,20 @@ const Training: React.FC = () => {
     const formData = new FormData();
 
     formData.append('prompts', JSON.stringify(promptCompletionPairs));
-
+    formData.append('guest', promptCompletionPairs.guest)
     if (image) {
       formData.append('image', image);
     }
-    const response = await fetch(process.env.REACT_APP_SAVE_CELEB_TRAINING_DATA as string, {
-      method: 'PUT',
-      body: formData
-    });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_SAVE_CELEB_TRAINING_DATA as string}`, {
+        method: "POST",
+        body: formData,
+        mode: "cors"
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    
     setNeedsToSave(false);
   };
 

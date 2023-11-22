@@ -6,7 +6,7 @@ const s3Client = new S3Client({ region: "us-east-2" });
 exports.handler = async (event) => {
 
 	try {
-		const guest = event.queryStringParameters.guest;
+		const guest = event.JSON.parse(event.body).guest;
 		const updatedPrompts = JSON.parse(event.body).prompts;
 
 		let imageKey;
