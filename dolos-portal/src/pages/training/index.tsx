@@ -104,7 +104,6 @@ const Training: React.FC = () => {
       const response = await fetch(`${process.env.REACT_APP_SAVE_CELEB_TRAINING_DATA as string}`, {
         method: "POST",
         body: formData,
-        mode: "cors"
       });
     } catch (err) {
       console.error(err);

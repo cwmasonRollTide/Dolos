@@ -6,13 +6,13 @@ const s3Client = new S3Client({ region: "us-east-2" });
 exports.handler = async (event) => {
 
 	try {
-		const guest = event.JSON.parse(event.body).guest;
+		const guest = JSON.parse(event.body).guest;
 		const updatedPrompts = JSON.parse(event.body).prompts;
 
 		let imageKey;
 
 		if (event.body.image) {
-			const {Key} = await uploadToS3(event.body.image);
+			const {Key} = await uploadToS3(event.body.image, guest);
 			imageKey = Key;
 		}
 
@@ -42,7 +42,7 @@ exports.handler = async (event) => {
 	}
 };
 
-async function uploadToS3(image) {
+async function uploadToS3(image, guest) {
 
 	const buffer = Buffer.from(image, 'base64');
 
